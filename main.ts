@@ -1,29 +1,34 @@
-// One sentence pitching a friend who has never coded on letting an AI
-// agent build their first app idea on make.fun. The program writes the
-// sentence to /output/entry.txt; the house judge compares it two at a time,
-// most important first: on-subject, persuasion, clarity, truth, warmth.
-// The line opens with the friend's idea and their blocker, gives the easy
-// ask (describe it in plain words), then the low-risk reason to say yes.
+// Builds the one-line pitch for make.fun's "A Day of One-Line Pitches" bounty
+// and writes it to /output/entry.txt: one sentence, at most 240 characters,
+// no trailing newline.
+//
+// The pitch is written to score well on what the house judge compares:
+// staying on subject (convincing a friend who has never coded to try
+// make.fun), persuasion (a concrete, low-risk reason to say yes now),
+// clarity (plain words, understood in a single read), truth (no promise
+// beyond what make.fun actually does), and warmth (sounding like a person
+// talking to a friend, not a slogan).
+
 import { mkdirSync, writeFileSync } from "node:fs";
+
+const MAX_CHARS = 240;
 
 const HOOK = "Got an app idea but can't code?";
 const ASK = "Describe it on make.fun in plain words and an AI agent builds it";
 const PAYOFF = "you only pay for the one you love";
 
 function buildLine(): string {
-  return `${HOOK} ${ASK} \u2014 ${PAYOFF}.`;
+  return HOOK + " " + ASK + " " + "—" + " " + PAYOFF + ".";
 }
 
-const LINE = buildLine();
+const line = buildLine();
 
-const MAX_CHARS = 240;
-
-function writeEntry(): void {
-  if (LINE.length < 1 || LINE.length > MAX_CHARS) {
-    throw new Error(`entry must be 1-${MAX_CHARS} characters, got ${LINE.length}`);
+function writeEntry(text: string): void {
+  if (text.length < 1 || text.length > MAX_CHARS) {
+    throw new Error(`entry must be 1-${MAX_CHARS} characters, got ${text.length}`);
   }
   mkdirSync("/output", { recursive: true });
-  writeFileSync("/output/entry.txt", LINE, "utf8");
+  writeFileSync("/output/entry.txt", text, "utf8");
 }
 
-writeEntry();
+writeEntry(line);
